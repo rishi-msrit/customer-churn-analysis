@@ -15,6 +15,7 @@
     <div class="sidebar-header">
       <span class="sidebar-title">Churn Analysis</span>
       <span class="sidebar-sub">IBM Telco Dataset</span>
+      <button class="theme-circle" id="themeBtn" title="Toggle light / dark mode">&#9790;</button>
     </div>
     <ul class="nav-links">
       <li><a href="/index.html">Overview</a></li>
@@ -23,15 +24,16 @@
       <li><a href="/pages/model-performance.html">Model Performance</a></li>
       <li><a href="/pages/segments.html">Customer Segments</a></li>
     </ul>
-    <div class="sidebar-footer">
-      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
-    </div>
+
   </nav>
 
   <main class="content">
 
     <div class="page-header">
-      <h1>Model Performance</h1>
+      <div class="header-row">
+        <h1>Model Performance</h1>
+        <button class="info-btn" id="infoBtn" title="About this page">i</button>
+      </div>
       <p>Logistic regression trained on an 80/20 stratified split. Metrics reported on the held-out test set only.</p>
     </div>
 
@@ -76,7 +78,7 @@
         <div id="c-pr" class="chart-ph"></div>
       </div>
       <div class="chart-box">
-        <h3>Feature Importance — Top 15 by |Coefficient|</h3>
+        <h3>Feature Importance, Top 15 by |Coefficient|</h3>
         <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px">
           Red = increases churn probability &nbsp;|&nbsp; Green = decreases it
         </p>
@@ -89,7 +91,7 @@
       <div class="limitations-title">Model Limitations</div>
       <p id="classBalanceNote" style="margin-bottom:8px"></p>
       <ul style="padding-left:18px;line-height:1.7">
-        <li>This is a static training dataset — the model does not learn from new customer behaviour after deployment.</li>
+        <li>This is a static training dataset. The model does not learn from new customer behaviour after deployment.</li>
         <li>Logistic regression assumes a linear decision boundary. Non-linear patterns (e.g. interaction between tenure and fibre internet) are not captured.</li>
         <li>ROC-AUC and accuracy are reported on a single hold-out split; reported scores may overestimate real-world performance slightly.</li>
         <li>Several features (gender, partner, dependents) had no statistically significant association with churn in this dataset but are included in the model for completeness.</li>
@@ -97,6 +99,19 @@
     </div>
 
   </main>
+</div>
+
+<div class="modal-overlay" id="infoModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&#x2715;</button>
+    <div class="modal-head">About this page</div>
+    <ul class="modal-list">
+      <li><strong>Confusion Matrix</strong>A 2x2 count of correct and incorrect predictions on the held-out test set. The top-right cell (false positives) and bottom-left cell (false negatives) represent the two types of error.</li>
+      <li><strong>ROC Curve</strong>Plots true positive rate against false positive rate across all classification thresholds. AUC of 0.84 means the model ranks a random churner above a random non-churner 84% of the time.</li>
+      <li><strong>Precision-Recall Curve</strong>More informative than ROC when classes are imbalanced. A drop in precision at high recall means the model catches more churners but also flags more non-churners.</li>
+      <li><strong>Feature Importance</strong>Absolute logistic regression coefficient magnitude after standardisation. Red bars increase churn probability; green bars reduce it.</li>
+    </ul>
+  </div>
 </div>
 
 <script src="/assets/js/main.js"></script>
@@ -119,6 +134,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadChart("c-pr",   "model_pr.json");
   loadChart("c-feat", "model_importance.json");
 });
+</script>
+<script>
+const _m = document.getElementById("infoModal");
+document.getElementById("infoBtn").addEventListener("click", () => _m.classList.add("open"));
+document.getElementById("modalClose").addEventListener("click", () => _m.classList.remove("open"));
+_m.addEventListener("click", e => { if (e.target === _m) _m.classList.remove("open"); });
 </script>
 </body>
 </html>

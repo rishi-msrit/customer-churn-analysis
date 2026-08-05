@@ -462,7 +462,7 @@ seg_strategies = {
         "outreach with competitive pricing or contract incentives may retain this group."
     ),
     "At-Risk VIPs": (
-        "High-value customers with the strongest churn risk — the highest priority "
+        "High-value customers with the strongest churn risk. The highest priority "
         "for any retention team. Proactive intervention and personalised offers are warranted."
     ),
 }

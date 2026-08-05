@@ -15,6 +15,7 @@
     <div class="sidebar-header">
       <span class="sidebar-title">Churn Analysis</span>
       <span class="sidebar-sub">IBM Telco Dataset</span>
+      <button class="theme-circle" id="themeBtn" title="Toggle light / dark mode">&#9790;</button>
     </div>
     <ul class="nav-links">
       <li><a href="/index.html">Overview</a></li>
@@ -23,21 +24,22 @@
       <li><a href="/pages/model-performance.html">Model Performance</a></li>
       <li><a href="/pages/segments.html">Customer Segments</a></li>
     </ul>
-    <div class="sidebar-footer">
-      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
-    </div>
+
   </nav>
 
   <main class="content">
 
     <div class="page-header">
-      <h1>Customer Segments</h1>
+      <div class="header-row">
+        <h1>Customer Segments</h1>
+        <button class="info-btn" id="infoBtn" title="About this page">i</button>
+      </div>
       <p>K-means clustering (k=4) on tenure, monthly charges, and predicted churn probability. Each segment is labelled by its position on the value vs. risk axes.</p>
     </div>
 
     <div class="chart-grid cols-2">
       <div class="chart-box">
-        <h3>PCA Projection — Customers Coloured by Segment</h3>
+        <h3>PCA Projection, Customers Coloured by Segment</h3>
         <p style="font-size:0.74rem;color:var(--text-muted);margin-bottom:8px">PCA reduces the three clustering features to two dimensions for visualisation. Hover for individual customer details.</p>
         <div id="c-scatter" class="chart-ph-lg"></div>
       </div>
@@ -66,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const r = await fetch("/data/segments_profiles.json");
     const segs = await r.json();
 
-    // Sort by avg churn probability ascending so cards go low-risk → high-risk
+    // Sort by avg churn probability ascending so cards go low-risk to high-risk
     const sorted = Object.values(segs).sort((a, b) => a.avg_churn_prob - b.avg_churn_prob);
 
     document.getElementById("segCards").innerHTML = sorted.map(s => `
@@ -102,6 +104,25 @@ document.addEventListener("DOMContentLoaded", async () => {
       '<p style="color:var(--text-muted);font-size:0.85rem">Run analysis script to generate segment data.</p>';
   }
 });
+</script>
+
+<div class="modal-overlay" id="infoModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&#x2715;</button>
+    <div class="modal-head">About this page</div>
+    <ul class="modal-list">
+      <li><strong>PCA Scatter</strong>Three clustering dimensions (tenure, monthly charges, predicted churn probability) are reduced to two axes for plotting. Each dot is one customer; colour shows their segment. Hover for individual details.</li>
+      <li><strong>Churn Rate by Segment</strong>The actual observed churn rate within each k-means cluster, ordered from lowest to highest risk. This confirms the clusters correspond to meaningful real-world retention categories.</li>
+      <li><strong>Segment Cards</strong>Each card summarises one cluster's average profile and suggests a retention action. Segments are labelled based on whether average charges and churn probability fall above or below the dataset medians.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const _m = document.getElementById("infoModal");
+document.getElementById("infoBtn").addEventListener("click", () => _m.classList.add("open"));
+document.getElementById("modalClose").addEventListener("click", () => _m.classList.remove("open"));
+_m.addEventListener("click", e => { if (e.target === _m) _m.classList.remove("open"); });
 </script>
 </body>
 </html>

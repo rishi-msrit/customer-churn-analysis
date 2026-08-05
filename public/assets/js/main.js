@@ -3,7 +3,7 @@ const THEME_KEY = "ca-theme";
 function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
   const btn = document.getElementById("themeBtn");
-  if (btn) btn.textContent = theme === "dark" ? "☀  Light mode" : "☾  Dark mode";
+  if (btn) btn.textContent = theme === "dark" ? "☀" : "☾";
   localStorage.setItem(THEME_KEY, theme);
 
   // Re-tint any already-rendered Plotly charts

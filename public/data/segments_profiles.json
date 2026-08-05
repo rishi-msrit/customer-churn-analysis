@@ -12,7 +12,7 @@
   "1": {
     "name": "At-Risk VIPs",
     "color": "#d94f4f",
-    "strategy": "High-value customers with the strongest churn risk \u2014 the highest priority for any retention team. Proactive intervention and personalised offers are warranted.",
+    "strategy": "High-value customers with the strongest churn risk. The highest priority for any retention team. Proactive intervention and personalised offers are warranted.",
     "avg_tenure": 15.5,
     "avg_charges": 84.06,
     "avg_churn_prob": 77.0,

@@ -15,6 +15,7 @@
     <div class="sidebar-header">
       <span class="sidebar-title">Churn Analysis</span>
       <span class="sidebar-sub">IBM Telco Dataset</span>
+      <button class="theme-circle" id="themeBtn" title="Toggle light / dark mode">&#9790;</button>
     </div>
     <ul class="nav-links">
       <li><a href="/index.html">Overview</a></li>
@@ -23,16 +24,17 @@
       <li><a href="/pages/model-performance.html">Model Performance</a></li>
       <li><a href="/pages/segments.html">Customer Segments</a></li>
     </ul>
-    <div class="sidebar-footer">
-      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
-    </div>
+
   </nav>
 
   <main class="content">
 
     <div class="page-header">
-      <h1>Overview</h1>
-      <p>Headline figures and distributions across the full dataset. All values are computed from the IBM Telco Customer Churn sample.</p>
+      <div class="header-row">
+        <h1>Overview</h1>
+        <button class="info-btn" id="infoBtn" title="About this page">i</button>
+      </div>
+      <p>Summary of customer churn across the full dataset. All values are computed from the IBM Telco Customer Churn sample.</p>
     </div>
 
     <div class="kpi-strip">
@@ -76,6 +78,19 @@
       </div>
     </div>
 
+    <div class="modal-overlay" id="infoModal">
+      <div class="modal-box">
+        <button class="modal-close" id="modalClose">&#x2715;</button>
+        <div class="modal-head">About this page</div>
+        <ul class="modal-list">
+          <li><strong>Churn vs. Retained</strong>Shows what share of the 7,043 customers left the service. The percentage inside the ring is the overall churn rate across the full dataset.</li>
+          <li><strong>Churn Rate by Contract</strong>Month-to-month customers can leave at any time, producing much higher churn rates compared to customers on one- or two-year agreements.</li>
+          <li><strong>Tenure Distribution</strong>Overlapping histograms of how long churners and retained customers had been on the service. Most churn concentrates within the first 12 months.</li>
+          <li><strong>Monthly Charges Distribution</strong>Bill amount distribution for both groups. Churners cluster at higher charge levels, often linked to fibre optic internet plans.</li>
+        </ul>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -99,6 +114,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadChart("c-tenure",   "overview_tenure_hist.json");
   loadChart("c-charges",  "overview_charges_hist.json");
 });
+</script>
+<script>
+const _m = document.getElementById("infoModal");
+document.getElementById("infoBtn").addEventListener("click", () => _m.classList.add("open"));
+document.getElementById("modalClose").addEventListener("click", () => _m.classList.remove("open"));
+_m.addEventListener("click", e => { if (e.target === _m) _m.classList.remove("open"); });
 </script>
 </body>
 </html>

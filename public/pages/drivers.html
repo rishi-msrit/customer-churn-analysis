@@ -15,6 +15,7 @@
     <div class="sidebar-header">
       <span class="sidebar-title">Churn Analysis</span>
       <span class="sidebar-sub">IBM Telco Dataset</span>
+      <button class="theme-circle" id="themeBtn" title="Toggle light / dark mode">&#9790;</button>
     </div>
     <ul class="nav-links">
       <li><a href="/index.html">Overview</a></li>
@@ -23,15 +24,16 @@
       <li><a href="/pages/model-performance.html">Model Performance</a></li>
       <li><a href="/pages/segments.html">Customer Segments</a></li>
     </ul>
-    <div class="sidebar-footer">
-      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
-    </div>
+
   </nav>
 
   <main class="content">
 
     <div class="page-header">
-      <h1>Churn Drivers</h1>
+      <div class="header-row">
+        <h1>Churn Drivers</h1>
+        <button class="info-btn" id="infoBtn" title="About this page">i</button>
+      </div>
       <p>Which factors are most strongly associated with a customer leaving? Chi-square and point-biserial correlations computed on the full dataset.</p>
     </div>
 
@@ -56,7 +58,7 @@
 
     <div class="chart-grid cols-1" style="margin-top:20px">
       <div class="chart-box">
-        <h3>Service Add-ons — With vs. Without (churn rate comparison)</h3>
+        <h3>Service Add-ons, With vs. Without (churn rate comparison)</h3>
         <div id="c-services" class="chart-ph-lg"></div>
       </div>
     </div>
@@ -104,10 +106,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         : "";
 
       if ("chi2" in val) {
-        items.push(`<li><strong>${label}</strong> — χ²(${val.df}) = ${val.chi2.toFixed(1)}${sig}</li>`);
+        items.push(`<li><strong>${label}</strong>: chi-sq(${val.df}) = ${val.chi2.toFixed(1)}${sig}</li>`);
       } else if ("r" in val) {
         const dir = val.r < 0 ? "negative" : "positive";
-        items.push(`<li><strong>${label}</strong> — point-biserial r = ${val.r.toFixed(3)} (${dir} correlation with churn)${sig}</li>`);
+        items.push(`<li><strong>${label}</strong>: r = ${val.r.toFixed(3)} (${dir} correlation with churn)${sig}</li>`);
       }
     }
     ul.innerHTML = items.join("");
@@ -122,6 +124,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadChart("c-heatmap",     "drivers_heatmap.json");
   loadChart("c-box",         "drivers_charges_box.json");
 });
+</script>
+
+<div class="modal-overlay" id="infoModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&#x2715;</button>
+    <div class="modal-head">About this page</div>
+    <ul class="modal-list">
+      <li><strong>Statistical Findings</strong>Chi-square tests measure association between categorical variables and churn. Point-biserial r measures correlation for numeric variables. All findings here are significant at p less than 0.001.</li>
+      <li><strong>Tenure Band</strong>Churn rate grouped into four time windows. The sharp drop between the 0-12 month band and later bands is the clearest pattern in the dataset.</li>
+      <li><strong>Payment Method</strong>Electronic check users churn at roughly double the rate of automatic-payment customers, likely reflecting lower commitment or billing friction.</li>
+      <li><strong>Service Add-ons</strong>For each service, the bars compare churn rate for customers who have it versus those who do not. Security and support add-ons show the strongest protective effect.</li>
+      <li><strong>Contract x Internet Heatmap</strong>Combined view of two variables. Fibre optic on a month-to-month contract is the single highest-risk combination in the dataset.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const _m = document.getElementById("infoModal");
+document.getElementById("infoBtn").addEventListener("click", () => _m.classList.add("open"));
+document.getElementById("modalClose").addEventListener("click", () => _m.classList.remove("open"));
+_m.addEventListener("click", e => { if (e.target === _m) _m.classList.remove("open"); });
 </script>
 </body>
 </html>

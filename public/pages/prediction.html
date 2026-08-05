@@ -14,6 +14,7 @@
     <div class="sidebar-header">
       <span class="sidebar-title">Churn Analysis</span>
       <span class="sidebar-sub">IBM Telco Dataset</span>
+      <button class="theme-circle" id="themeBtn" title="Toggle light / dark mode">&#9790;</button>
     </div>
     <ul class="nav-links">
       <li><a href="/index.html">Overview</a></li>
@@ -22,16 +23,17 @@
       <li><a href="/pages/model-performance.html">Model Performance</a></li>
       <li><a href="/pages/segments.html">Customer Segments</a></li>
     </ul>
-    <div class="sidebar-footer">
-      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
-    </div>
+
   </nav>
 
   <main class="content">
 
     <div class="page-header">
-      <h1>Prediction Tool</h1>
-      <p>Adjust the customer attributes below. The trained logistic regression model updates the churn probability in real time — no server request needed.</p>
+      <div class="header-row">
+        <h1>Prediction Tool</h1>
+        <button class="info-btn" id="infoBtn" title="About this page">i</button>
+      </div>
+      <p>Adjust the customer attributes below. The trained logistic regression model updates the churn probability in real time. No server request needed.</p>
     </div>
 
     <div class="pred-layout">
@@ -132,6 +134,25 @@
   </main>
 </div>
 
+<div class="modal-overlay" id="infoModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&#x2715;</button>
+    <div class="modal-head">About this page</div>
+    <ul class="modal-list">
+      <li><strong>How it works</strong>The sliders and checkboxes feed values into a logistic regression model trained on this dataset. The coefficients were exported and the probability is computed in your browser. No data leaves your device.</li>
+      <li><strong>Most influential inputs</strong>Tenure and contract type drive the prediction most strongly. Try switching from month-to-month to a two-year contract to see the probability drop.</li>
+      <li><strong>What is driving this</strong>The five bars show which features pushed the probability up (red) or down (green) from the model baseline. Bar length reflects relative impact.</li>
+      <li><strong>Total Charges</strong>Not shown as a separate input. It is automatically derived from tenure times monthly charges, matching how the model was trained.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const _m = document.getElementById("infoModal");
+document.getElementById("infoBtn").addEventListener("click", () => _m.classList.add("open"));
+document.getElementById("modalClose").addEventListener("click", () => _m.classList.remove("open"));
+_m.addEventListener("click", e => { if (e.target === _m) _m.classList.remove("open"); });
+</script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/predictor.js"></script>
 </body>
