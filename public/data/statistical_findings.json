@@ -1,0 +1,47 @@
+{
+  "Contract": {
+    "chi2": 1184.6,
+    "p": 0.0,
+    "df": 2,
+    "significant": true
+  },
+  "PaymentMethod": {
+    "chi2": 648.14,
+    "p": 0.0,
+    "df": 3,
+    "significant": true
+  },
+  "InternetService": {
+    "chi2": 732.31,
+    "p": 0.0,
+    "df": 2,
+    "significant": true
+  },
+  "TechSupport": {
+    "chi2": 828.2,
+    "p": 0.0,
+    "df": 2,
+    "significant": true
+  },
+  "OnlineSecurity": {
+    "chi2": 850.0,
+    "p": 0.0,
+    "df": 2,
+    "significant": true
+  },
+  "tenure": {
+    "r": -0.3522,
+    "p": 0.0,
+    "significant": true
+  },
+  "MonthlyCharges": {
+    "r": 0.1934,
+    "p": 0.0,
+    "significant": true
+  },
+  "TotalCharges": {
+    "r": -0.1983,
+    "p": 0.0,
+    "significant": true
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "0": {
+    "name": "Stable Budget",
+    "color": "#4a9ead",
+    "strategy": "Long-tenured, lower-spending customers who are unlikely to leave. Maintain satisfaction; gentle nudges toward higher-value plans can increase LTV.",
+    "avg_tenure": 50.0,
+    "avg_charges": 33.63,
+    "avg_churn_prob": 7.6,
+    "actual_churn_rate": 4.2,
+    "size": 1362
+  },
+  "1": {
+    "name": "At-Risk VIPs",
+    "color": "#d94f4f",
+    "strategy": "High-value customers with the strongest churn risk \u2014 the highest priority for any retention team. Proactive intervention and personalised offers are warranted.",
+    "avg_tenure": 15.5,
+    "avg_charges": 84.06,
+    "avg_churn_prob": 77.0,
+    "actual_churn_rate": 55.4,
+    "size": 2087
+  },
+  "2": {
+    "name": "Stable High-Value",
+    "color": "#3d9970",
+    "strategy": "Loyal, high-spending customers with low churn risk. Focus on rewarding loyalty and offering premium add-ons rather than discounts.",
+    "avg_tenure": 58.9,
+    "avg_charges": 92.02,
+    "avg_churn_prob": 25.0,
+    "actual_churn_rate": 12.6,
+    "size": 1860
+  },
+  "3": {
+    "name": "At-Risk Budget",
+    "color": "#e8a838",
+    "strategy": "Lower-spending customers showing elevated churn signals. Targeted outreach with competitive pricing or contract incentives may retain this group.",
+    "avg_tenure": 10.3,
+    "avg_charges": 36.75,
+    "avg_churn_prob": 42.8,
+    "actual_churn_rate": 24.3,
+    "size": 1734
+  }
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediction Tool — Customer Churn Analysis</title>
+  <meta name="description" content="Enter a customer's attributes to get a live churn probability from a trained logistic regression model.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+<div class="page-wrap">
+
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Churn Analysis</span>
+      <span class="sidebar-sub">IBM Telco Dataset</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/index.html">Overview</a></li>
+      <li><a href="/pages/drivers.html">Churn Drivers</a></li>
+      <li><a href="/pages/prediction.html">Prediction Tool</a></li>
+      <li><a href="/pages/model-performance.html">Model Performance</a></li>
+      <li><a href="/pages/segments.html">Customer Segments</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
+    </div>
+  </nav>
+
+  <main class="content">
+
+    <div class="page-header">
+      <h1>Prediction Tool</h1>
+      <p>Adjust the customer attributes below. The trained logistic regression model updates the churn probability in real time — no server request needed.</p>
+    </div>
+
+    <div class="pred-layout">
+
+      <!-- Input form -->
+      <div class="form-panel">
+        <div class="panel-title">Customer Attributes</div>
+
+        <div class="form-group">
+          <label class="form-label" for="tenureSlider">Tenure</label>
+          <div class="range-row">
+            <input type="range" id="tenureSlider" min="0" max="72" value="12" step="1">
+            <span class="range-val" id="tenureVal">12 mo</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="chargesSlider">Monthly Charges</label>
+          <div class="range-row">
+            <input type="range" id="chargesSlider" min="18" max="120" value="65" step="1">
+            <span class="range-val" id="chargesVal">$65</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contract">Contract Type</label>
+          <select id="contract">
+            <option value="month_to_month">Month-to-Month</option>
+            <option value="one_year">One Year</option>
+            <option value="two_year">Two Year</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="internet">Internet Service</label>
+          <select id="internet">
+            <option value="dsl">DSL</option>
+            <option value="fiber">Fiber Optic</option>
+            <option value="none">No Internet</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Add-ons & Account</label>
+          <div class="check-grid">
+            <label class="check-item">
+              <input type="checkbox" id="techSupport"> Tech Support
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="security"> Online Security
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="streamTV"> Streaming TV
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="streamMovie"> Streaming Movies
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="multiLine"> Multiple Lines
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="paperless"> Paperless Billing
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="senior"> Senior Citizen
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result panel -->
+      <div class="result-panel">
+        <div class="panel-title">Predicted Churn Probability</div>
+
+        <div class="prob-number" id="probNum">—</div>
+        <div class="risk-badge" id="riskBadge">Loading model…</div>
+
+        <div class="prob-track">
+          <div class="prob-fill" id="probFill" style="width:0%"></div>
+        </div>
+
+        <div class="drivers-section">
+          <h4>What's driving this prediction</h4>
+          <div id="driverRows">
+            <div style="color:var(--text-muted);font-size:0.83rem;padding:8px 0">Waiting for model…</div>
+          </div>
+        </div>
+
+        <p style="margin-top:20px;font-size:0.76rem;color:var(--text-muted);line-height:1.5">
+          Prediction is computed client-side using exported logistic regression
+          coefficients. It reflects patterns in the training data only and should
+          not be used for real-world customer decisions without additional validation.
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/predictor.js"></script>
+</body>
+</html>

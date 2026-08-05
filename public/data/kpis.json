@@ -1,0 +1,8 @@
+{
+  "total_customers": 7043,
+  "churned": 1869,
+  "churn_rate": 26.5,
+  "avg_tenure": 32.4,
+  "avg_monthly_charges": 64.76,
+  "tc_blanks_fixed": 11
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Performance — Customer Churn Analysis</title>
+  <meta name="description" content="Logistic regression model evaluation — confusion matrix, ROC curve, precision-recall curve, and feature importance with transparent limitations.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Churn Analysis</span>
+      <span class="sidebar-sub">IBM Telco Dataset</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/index.html">Overview</a></li>
+      <li><a href="/pages/drivers.html">Churn Drivers</a></li>
+      <li><a href="/pages/prediction.html">Prediction Tool</a></li>
+      <li><a href="/pages/model-performance.html">Model Performance</a></li>
+      <li><a href="/pages/segments.html">Customer Segments</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
+    </div>
+  </nav>
+
+  <main class="content">
+
+    <div class="page-header">
+      <h1>Model Performance</h1>
+      <p>Logistic regression trained on an 80/20 stratified split. Metrics reported on the held-out test set only.</p>
+    </div>
+
+    <!-- Metric strip -->
+    <div class="metrics-row" id="metricsRow">
+      <div class="metric-cell">
+        <span class="metric-num" id="mAcc">—</span>
+        <span class="metric-name">Accuracy</span>
+      </div>
+      <div class="metric-cell">
+        <span class="metric-num" id="mPrec">—</span>
+        <span class="metric-name">Precision</span>
+      </div>
+      <div class="metric-cell">
+        <span class="metric-num" id="mRecall">—</span>
+        <span class="metric-name">Recall</span>
+      </div>
+      <div class="metric-cell">
+        <span class="metric-num" id="mF1">—</span>
+        <span class="metric-name">F1 Score</span>
+      </div>
+      <div class="metric-cell">
+        <span class="metric-num" id="mAuc">—</span>
+        <span class="metric-name">ROC-AUC</span>
+      </div>
+    </div>
+
+    <div class="chart-grid cols-2">
+      <div class="chart-box">
+        <h3>Confusion Matrix</h3>
+        <div id="c-cm" class="chart-ph"></div>
+      </div>
+      <div class="chart-box">
+        <h3>ROC Curve</h3>
+        <div id="c-roc" class="chart-ph"></div>
+      </div>
+    </div>
+
+    <div class="chart-grid cols-2" style="margin-top:20px">
+      <div class="chart-box">
+        <h3>Precision-Recall Curve</h3>
+        <div id="c-pr" class="chart-ph"></div>
+      </div>
+      <div class="chart-box">
+        <h3>Feature Importance — Top 15 by |Coefficient|</h3>
+        <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px">
+          Red = increases churn probability &nbsp;|&nbsp; Green = decreases it
+        </p>
+        <div id="c-feat" class="chart-ph-lg"></div>
+      </div>
+    </div>
+
+    <!-- Limitations -->
+    <div class="limitations">
+      <div class="limitations-title">Model Limitations</div>
+      <p id="classBalanceNote" style="margin-bottom:8px"></p>
+      <ul style="padding-left:18px;line-height:1.7">
+        <li>This is a static training dataset — the model does not learn from new customer behaviour after deployment.</li>
+        <li>Logistic regression assumes a linear decision boundary. Non-linear patterns (e.g. interaction between tenure and fibre internet) are not captured.</li>
+        <li>ROC-AUC and accuracy are reported on a single hold-out split; reported scores may overestimate real-world performance slightly.</li>
+        <li>Several features (gender, partner, dependents) had no statistically significant association with churn in this dataset but are included in the model for completeness.</li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const r = await fetch("/data/model_stats.json");
+    const d = await r.json();
+    document.getElementById("mAcc").textContent    = d.accuracy;
+    document.getElementById("mPrec").textContent   = d.precision;
+    document.getElementById("mRecall").textContent = d.recall;
+    document.getElementById("mF1").textContent     = d.f1;
+    document.getElementById("mAuc").textContent    = d.roc_auc;
+    document.getElementById("classBalanceNote").textContent = d.class_balance_note || "";
+  } catch(e) {}
+
+  loadChart("c-cm",   "model_cm.json");
+  loadChart("c-roc",  "model_roc.json");
+  loadChart("c-pr",   "model_pr.json");
+  loadChart("c-feat", "model_importance.json");
+});
+</script>
+</body>
+</html>

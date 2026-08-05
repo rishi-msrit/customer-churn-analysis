@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Churn Drivers — Customer Churn Analysis</title>
+  <meta name="description" content="Explore which factors drive telecom customer churn — contract type, payment method, service add-ons, and tenure.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Churn Analysis</span>
+      <span class="sidebar-sub">IBM Telco Dataset</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/index.html">Overview</a></li>
+      <li><a href="/pages/drivers.html">Churn Drivers</a></li>
+      <li><a href="/pages/prediction.html">Prediction Tool</a></li>
+      <li><a href="/pages/model-performance.html">Model Performance</a></li>
+      <li><a href="/pages/segments.html">Customer Segments</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
+    </div>
+  </nav>
+
+  <main class="content">
+
+    <div class="page-header">
+      <h1>Churn Drivers</h1>
+      <p>Which factors are most strongly associated with a customer leaving? Chi-square and point-biserial correlations computed on the full dataset.</p>
+    </div>
+
+    <!-- statistical findings panel, populated from JSON -->
+    <div class="findings" id="findingsPanel">
+      <div class="findings-title">Statistical Associations</div>
+      <ul id="findingsList">
+        <li style="color:var(--text-muted);font-size:0.85rem">Loading findings…</li>
+      </ul>
+    </div>
+
+    <div class="chart-grid cols-2">
+      <div class="chart-box">
+        <h3>Churn Rate by Tenure Band</h3>
+        <div id="c-tenure-band" class="chart-ph"></div>
+      </div>
+      <div class="chart-box">
+        <h3>Churn Rate by Payment Method</h3>
+        <div id="c-payment" class="chart-ph"></div>
+      </div>
+    </div>
+
+    <div class="chart-grid cols-1" style="margin-top:20px">
+      <div class="chart-box">
+        <h3>Service Add-ons — With vs. Without (churn rate comparison)</h3>
+        <div id="c-services" class="chart-ph-lg"></div>
+      </div>
+    </div>
+
+    <div class="chart-grid cols-2" style="margin-top:20px">
+      <div class="chart-box">
+        <h3>Contract Type × Internet Service — Churn Heatmap</h3>
+        <div id="c-heatmap" class="chart-ph"></div>
+      </div>
+      <div class="chart-box">
+        <h3>Monthly Charges Distribution by Churn Status</h3>
+        <div id="c-box" class="chart-ph"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script>
+const FINDING_LABELS = {
+  Contract:         "Contract type",
+  PaymentMethod:    "Payment method",
+  InternetService:  "Internet service type",
+  TechSupport:      "Tech support subscription",
+  OnlineSecurity:   "Online security subscription",
+  tenure:           "Tenure",
+  MonthlyCharges:   "Monthly charges",
+  TotalCharges:     "Total charges",
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // Load and render statistical findings
+  try {
+    const r = await fetch("/data/statistical_findings.json");
+    const d = await r.json();
+    const ul = document.getElementById("findingsList");
+    const items = [];
+
+    for (const [key, val] of Object.entries(d)) {
+      const label = FINDING_LABELS[key] || key;
+      const sig   = val.significant
+        ? '<span class="tag-sig">p &lt; 0.001</span>'
+        : "";
+
+      if ("chi2" in val) {
+        items.push(`<li><strong>${label}</strong> — χ²(${val.df}) = ${val.chi2.toFixed(1)}${sig}</li>`);
+      } else if ("r" in val) {
+        const dir = val.r < 0 ? "negative" : "positive";
+        items.push(`<li><strong>${label}</strong> — point-biserial r = ${val.r.toFixed(3)} (${dir} correlation with churn)${sig}</li>`);
+      }
+    }
+    ul.innerHTML = items.join("");
+  } catch(e) {
+    document.getElementById("findingsList").innerHTML =
+      '<li style="color:var(--text-muted)">Run analysis script to load findings.</li>';
+  }
+
+  loadChart("c-tenure-band", "drivers_tenure_band.json");
+  loadChart("c-payment",     "drivers_payment.json");
+  loadChart("c-services",    "drivers_services.json");
+  loadChart("c-heatmap",     "drivers_heatmap.json");
+  loadChart("c-box",         "drivers_charges_box.json");
+});
+</script>
+</body>
+</html>

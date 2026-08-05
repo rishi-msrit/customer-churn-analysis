@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Churn Analysis — Overview</title>
+  <meta name="description" content="Interactive analysis of telecom customer churn. Explore overall churn rate, tenure distributions, and charge patterns across 7,000+ customers.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Churn Analysis</span>
+      <span class="sidebar-sub">IBM Telco Dataset</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/index.html">Overview</a></li>
+      <li><a href="/pages/drivers.html">Churn Drivers</a></li>
+      <li><a href="/pages/prediction.html">Prediction Tool</a></li>
+      <li><a href="/pages/model-performance.html">Model Performance</a></li>
+      <li><a href="/pages/segments.html">Customer Segments</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
+    </div>
+  </nav>
+
+  <main class="content">
+
+    <div class="page-header">
+      <h1>Overview</h1>
+      <p>Headline figures and distributions across the full dataset. All values are computed from the IBM Telco Customer Churn sample.</p>
+    </div>
+
+    <div class="kpi-strip">
+      <div class="kpi">
+        <span class="kpi-value churn" id="kChurnRate">—</span>
+        <span class="kpi-label">Churn Rate</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-value" id="kTotal">—</span>
+        <span class="kpi-label">Total Customers</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-value" id="kTenure">—</span>
+        <span class="kpi-label">Avg. Tenure (months)</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-value" id="kCharges">—</span>
+        <span class="kpi-label">Avg. Monthly Charge</span>
+      </div>
+    </div>
+
+    <div class="chart-grid cols-2">
+      <div class="chart-box">
+        <h3>Churn vs. Retained</h3>
+        <div id="c-donut" class="chart-ph"></div>
+      </div>
+      <div class="chart-box">
+        <h3>Churn Rate by Contract Type</h3>
+        <div id="c-contract" class="chart-ph"></div>
+      </div>
+    </div>
+
+    <div class="chart-grid cols-2" style="margin-top:20px">
+      <div class="chart-box">
+        <h3>Tenure Distribution — Churned vs. Retained</h3>
+        <div id="c-tenure" class="chart-ph"></div>
+      </div>
+      <div class="chart-box">
+        <h3>Monthly Charges — Churned vs. Retained</h3>
+        <div id="c-charges" class="chart-ph"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const r = await fetch("/data/kpis.json");
+    const d = await r.json();
+    document.getElementById("kChurnRate").textContent = d.churn_rate + "%";
+    document.getElementById("kTotal").textContent     = d.total_customers.toLocaleString();
+    document.getElementById("kTenure").textContent    = d.avg_tenure;
+    document.getElementById("kCharges").textContent   = "$" + d.avg_monthly_charges;
+  } catch(e) {
+    console.warn("Run analysis/run_analysis.py to generate data files.");
+  }
+
+  loadChart("c-donut",    "overview_donut.json");
+  loadChart("c-contract", "overview_by_contract.json");
+  loadChart("c-tenure",   "overview_tenure_hist.json");
+  loadChart("c-charges",  "overview_charges_hist.json");
+});
+</script>
+</body>
+</html>

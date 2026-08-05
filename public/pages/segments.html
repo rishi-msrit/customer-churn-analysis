@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Segments — Churn Analysis</title>
+  <meta name="description" content="K-means customer segmentation by tenure, monthly charges, and predicted churn probability — with retention strategy recommendations per segment.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Churn Analysis</span>
+      <span class="sidebar-sub">IBM Telco Dataset</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/index.html">Overview</a></li>
+      <li><a href="/pages/drivers.html">Churn Drivers</a></li>
+      <li><a href="/pages/prediction.html">Prediction Tool</a></li>
+      <li><a href="/pages/model-performance.html">Model Performance</a></li>
+      <li><a href="/pages/segments.html">Customer Segments</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="theme-btn" id="themeBtn">☾  Dark mode</button>
+    </div>
+  </nav>
+
+  <main class="content">
+
+    <div class="page-header">
+      <h1>Customer Segments</h1>
+      <p>K-means clustering (k=4) on tenure, monthly charges, and predicted churn probability. Each segment is labelled by its position on the value vs. risk axes.</p>
+    </div>
+
+    <div class="chart-grid cols-2">
+      <div class="chart-box">
+        <h3>PCA Projection — Customers Coloured by Segment</h3>
+        <p style="font-size:0.74rem;color:var(--text-muted);margin-bottom:8px">PCA reduces the three clustering features to two dimensions for visualisation. Hover for individual customer details.</p>
+        <div id="c-scatter" class="chart-ph-lg"></div>
+      </div>
+      <div class="chart-box">
+        <h3>Actual Churn Rate per Segment</h3>
+        <div id="c-seg-bar" class="chart-ph-lg"></div>
+      </div>
+    </div>
+
+    <!-- Segment profile cards, generated from JSON -->
+    <div class="seg-cards" id="segCards">
+      <p style="color:var(--text-muted);font-size:0.85rem">Loading segment profiles…</p>
+    </div>
+
+  </main>
+</div>
+
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/charts.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  loadChart("c-scatter",  "segments_scatter.json");
+  loadChart("c-seg-bar",  "segments_churn_bar.json");
+
+  try {
+    const r = await fetch("/data/segments_profiles.json");
+    const segs = await r.json();
+
+    // Sort by avg churn probability ascending so cards go low-risk → high-risk
+    const sorted = Object.values(segs).sort((a, b) => a.avg_churn_prob - b.avg_churn_prob);
+
+    document.getElementById("segCards").innerHTML = sorted.map(s => `
+      <div class="seg-card">
+        <div class="seg-head">
+          <div class="seg-dot" style="background:${s.color}"></div>
+          <span class="seg-name">${s.name}</span>
+          <span class="seg-count">${s.size.toLocaleString()} customers</span>
+        </div>
+        <div class="seg-nums">
+          <div class="seg-num-item">
+            <strong>${s.avg_tenure} mo</strong>
+            <span>Avg. Tenure</span>
+          </div>
+          <div class="seg-num-item">
+            <strong>$${s.avg_charges}</strong>
+            <span>Avg. Monthly</span>
+          </div>
+          <div class="seg-num-item">
+            <strong>${s.actual_churn_rate}%</strong>
+            <span>Actual Churn</span>
+          </div>
+          <div class="seg-num-item">
+            <strong>${s.avg_churn_prob}%</strong>
+            <span>Predicted Risk</span>
+          </div>
+        </div>
+        <div class="seg-strategy">${s.strategy}</div>
+      </div>
+    `).join("");
+  } catch(e) {
+    document.getElementById("segCards").innerHTML =
+      '<p style="color:var(--text-muted);font-size:0.85rem">Run analysis script to generate segment data.</p>';
+  }
+});
+</script>
+</body>
+</html>
