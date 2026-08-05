@@ -10,7 +10,7 @@ Interactive analysis of telecom customer churn built on the IBM Telco Customer C
 
 | Overview Dashboard | Live Churn Predictor |
 |---|---|
-| ![Overview Page](public/assets/img/screenshots/overview.jpeg) | ![Prediction Tool](public/assets/img/screenshots/model_prediction.jpeg) |
+| ![Overview Page](public/assets/img/screenshots/overview.jpeg) | ![Prediction Tool](public/assets/img/screenshots/model_performance.jpeg) |
 
 | Churn Drivers & Heatmap | Customer Risk Segments |
 |---|---|
