@@ -1,29 +1,41 @@
 # Customer Churn Analysis & Retention Modeling
 
-**Live demo:** [customer-churn-analysis.vercel.app](#) *(link added after deploy)*
+**Live Application:** [https://customer-churn-analysis-one.vercel.app/](https://customer-churn-analysis-one.vercel.app/)
 
-Interactive analysis of telecom customer churn using the IBM Telco Customer Churn dataset (~7,000 customers). Exploratory data analysis, statistical driver identification, logistic regression churn prediction, and k-means customer segmentation — all visualised in a five-page static web app deployed on Vercel.
+Interactive analysis of telecom customer churn built on the IBM Telco Customer Churn dataset (7,043 customer records). Exploratory data analysis, statistical driver identification, logistic regression churn prediction, and k-means customer segmentation, all visualised in a clean five-page web application deployed on Vercel.
+
+---
+
+## Application Preview
+
+| Overview Dashboard | Live Churn Predictor |
+|---|---|
+| ![Overview Page](public/assets/img/screenshots/overview.png) | ![Prediction Tool](public/assets/img/screenshots/prediction.png) |
+
+| Churn Drivers & Heatmap | Customer Risk Segments |
+|---|---|
+| ![Drivers Page](public/assets/img/screenshots/drivers.png) | ![Segments Page](public/assets/img/screenshots/segments.png) |
 
 ---
 
 ## What This Solves
 
-Retention teams need to know *who* is about to leave and *why*. This project answers both:
+Retention teams need to understand who is at risk of leaving and why. This project provides actionable answers:
 
-- **Who** — a live prediction tool returns a churn probability for any customer profile
-- **Why** — statistical analysis identifies which contract type, tenure band, and service combinations are most strongly associated with churn
-- **How to act** — k-means clustering groups customers into retention-relevant segments with recommended strategies per segment
+- **Who**: a live interactive predictor calculates instant churn probability for any customer profile
+- **Why**: statistical analysis identifies which contract types, tenure bands, and services drive churn
+- **How to act**: k-means clustering groups customers into four actionable retention segments
 
 ---
 
 ## Tech Stack
 
-| Layer | Tools |
+| Layer | Technologies Used |
 |---|---|
-| Data & analysis | Python, pandas, scikit-learn, scipy |
-| Visualisation | Plotly (all charts interactive) |
-| Frontend | HTML, CSS, vanilla JS |
-| Hosting | Vercel (static, always-on free tier) |
+| Data & Analytics | Python, pandas, scikit-learn, scipy |
+| Visualisation | Plotly (interactive charts) |
+| Web Application | HTML, Vanilla CSS (custom properties), JavaScript |
+| Deployment | Vercel (static hosting, zero server latency) |
 
 ---
 
@@ -33,7 +45,7 @@ Retention teams need to know *who* is about to leave and *why*. This project ans
 WA_Fn-UseC_-Telco-Customer-Churn.csv
         │
         ▼
-analysis/run_analysis.py   (run once locally)
+analysis/run_analysis.py   (runs locally)
         │
         ├─► public/data/kpis.json
         ├─► public/data/*.json          (Plotly chart specs)
@@ -46,83 +58,65 @@ Static HTML/CSS/JS (public/)  →  Vercel
 
 ---
 
-## Key Findings
+## Key Analytics Findings
 
-| Finding | Value |
+| Metric / Driver | Analytical Result |
 |---|---|
-| Overall churn rate | **26.5%** (1,869 of 7,043 customers) |
-| Month-to-month contract churn rate | **~43%** |
-| Two-year contract churn rate | **~3%** |
-| Churn rate without Online Security | significantly higher (χ²=850.0, p<0.001) |
-| Churn rate without Tech Support | significantly higher (χ²=828.2, p<0.001) |
-| Tenure vs churn (point-biserial r) | **−0.352** — longer tenure strongly predicts retention |
-| Monthly charges vs churn (r) | **+0.193** — higher charges weakly predict churn |
-| TotalCharges blanks fixed | **11 rows** (new customers, tenure=0, set to $0) |
-| Logistic regression ROC-AUC | **0.8414** |
-| Logistic regression recall (churn class) | **0.7861** |
-| Logistic regression F1 (churn class) | **0.6164** |
+| Overall Churn Rate | **26.5%** (1,869 out of 7,043 customers) |
+| Month-to-Month Contract Churn | **42.7%** (highest risk contract group) |
+| Two-Year Contract Churn | **2.8%** (highest retention group) |
+| Online Security Association | Lack of security add-on strongly associated with churn (χ²=850.0, p<0.001) |
+| Tech Support Association | Lack of tech support strongly associated with churn (χ²=828.2, p<0.001) |
+| Tenure Correlation | Point-biserial **r = -0.352** (longer tenure strongly correlates with retention) |
+| Monthly Charges Correlation | Point-biserial **r = +0.193** (higher bills correlate with elevated churn) |
+| Data Cleaning Note | 11 missing `TotalCharges` entries (new customers with tenure=0) set to $0 |
+| Logistic Regression ROC-AUC | **0.8414** |
+| Logistic Regression Recall | **0.7861** |
+| Logistic Regression F1 Score | **0.6164** |
 
-**Segment breakdown (k=4):**
+### Customer Segments (K-Means, k=4)
 
-| Segment | Size | Avg Tenure | Avg Monthly | Actual Churn |
-|---|---|---|---|---|
-| Stable Budget | 1,362 | 50.0 mo | $33.63 | 4.2% |
-| Stable High-Value | 1,860 | 58.9 mo | $92.02 | 12.6% |
-| At-Risk Budget | 1,734 | 10.3 mo | $36.75 | 24.3% |
-| At-Risk VIPs | 2,087 | 15.5 mo | $84.06 | **55.4%** |
-
----
-
-## Pages
-
-| Page | What it shows |
-|---|---|
-| Overview | Headline KPIs, churn donut, contract bar, tenure and charges histograms |
-| Churn Drivers | Chi-square findings panel, 5 driver charts including heatmap |
-| Prediction Tool | Live form — model runs client-side with no server request |
-| Model Performance | Confusion matrix, ROC, PR curve, feature importance, limitations |
-| Customer Segments | PCA scatter, segment churn rates, profile cards with retention strategies |
+| Segment Name | Size | Avg Tenure | Avg Monthly | Actual Churn Rate | Recommended Strategy |
+|---|---|---|---|---|---|
+| **Stable Budget** | 1,362 | 50.0 mo | $33.63 | 4.2% | Maintain satisfaction; gentle nudges toward higher value plans |
+| **Stable High-Value** | 1,860 | 58.9 mo | $92.02 | 12.6% | Reward loyalty and offer premium add-ons |
+| **At-Risk Budget** | 1,734 | 10.3 mo | $36.75 | 24.3% | Targeted outreach with competitive pricing or contract incentives |
+| **At-Risk VIPs** | 2,087 | 15.5 mo | $84.06 | **55.4%** | Proactive retention team intervention and custom offers |
 
 ---
 
-## Methodology & Assumptions
+## Pages in the Application
 
-**Missing data:** The `TotalCharges` column contains a space character (not NaN) for customers with `tenure=0` who have not yet been billed. These are converted to numeric via `pd.to_numeric(errors='coerce')` and filled with `0`, representing $0 billed. The exact count is reported in `kpis.json`.
-
-**Model:** Logistic regression with `class_weight='balanced'` to handle the class imbalance (churn is approximately 26% of the dataset). 80/20 stratified train-test split with `random_state=42`. All features standardised with `StandardScaler`.
-
-**Clustering:** K-means (k=4) on standardised (tenure, monthly charges, predicted churn probability). Segment labels assigned programmatically based on whether a cluster's average charges and churn probability fall above or below dataset medians.
-
-**In-browser prediction:** The exported `model_coefficients.json` contains the LR intercept, feature coefficients, and scaler parameters. The browser re-applies standardisation and runs the sigmoid — mathematically identical to sklearn's `predict_proba`.
+1. **Overview**: Headline KPIs, churn donut split, contract type comparison, tenure and monthly charges histograms.
+2. **Churn Drivers**: Chi-square and correlation findings panel, payment method breakdown, service add-on comparisons, contract x internet service heatmap.
+3. **Prediction Tool**: Live input form running in-browser logistic regression inference with real-time probability calculation and feature contribution breakdown.
+4. **Model Performance**: Confusion matrix, ROC curve, precision-recall curve, feature importance rankings, and transparent model limitations.
+5. **Customer Segments**: 2D PCA cluster projection, segment churn rate comparison, and detailed segment profile cards.
 
 ---
 
-## Local Setup
+## Methodology & Design Choices
+
+- **Missing Data Handling**: `TotalCharges` contains whitespace for customers with `tenure=0`. Coerced to numeric and set to 0.
+- **Model Choice**: Logistic regression with `class_weight='balanced'` to handle the 26.5% minority class ratio. Stratified 80/20 train-test split.
+- **Client-Side Inference**: Model weights, intercept, and scaler parameters are exported to JSON. The prediction tool runs standardisation and sigmoid evaluation directly in JavaScript, eliminating API roundtrips.
+
+---
+
+## Local Setup Instructions
 
 ```bash
-# Clone
+# Clone the repository
 git clone https://github.com/rishi-msrit/customer-churn-analysis.git
 cd customer-churn-analysis
 
-# Install Python dependencies
+# Install Python requirements
 pip install -r analysis/requirements.txt
 
-# Place dataset
-# Copy WA_Fn-UseC_-Telco-Customer-Churn.csv → data/raw/
-
-# Run analysis (generates all public/data/*.json files)
+# Run the analysis pipeline (generates JSON artifacts in public/data/)
 python analysis/run_analysis.py
 
-# Serve locally
+# Launch local server
 npx serve public
-# → open http://localhost:3000
+# Open http://localhost:3000
 ```
-
----
-
-## What I'd Add With More Time
-
-- Filters on the Drivers page (filter charts by contract type or internet service)
-- Survival analysis (Kaplan-Meier) to model *time-to-churn* rather than binary outcome
-- SHAP values for the prediction tool (per-customer contribution breakdown beyond top features)
-- Monthly charge per-feature breakdown (the dataset bundles many services into one charge figure)
