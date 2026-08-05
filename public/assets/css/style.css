@@ -118,21 +118,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: none;
-  color: #888;
-  font-size: 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 0.85rem;
   cursor: pointer;
-  margin-top: 12px;
-  transition: color 0.15s, border-color 0.15s;
+  margin-top: 10px;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
 }
 
 .theme-circle:hover {
-  color: #e0ddd8;
-  border-color: rgba(255,255,255,0.3);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+  transform: scale(1.08);
 }
 
 /* main content */
@@ -574,23 +576,25 @@ select:focus { border-color: var(--accent); }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  border: 1px solid var(--border);
-  background: none;
-  color: var(--text-muted);
-  font-size: 0.72rem;
+  border: 1px solid var(--accent);
+  background: rgba(44, 95, 138, 0.1);
+  color: var(--accent);
+  font-size: 0.82rem;
   font-style: italic;
   font-family: Georgia, serif;
+  font-weight: 600;
   cursor: pointer;
   flex-shrink: 0;
-  transition: border-color 0.12s, color 0.12s;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
 }
 
 .info-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+  transform: scale(1.08);
 }
 
 /* ─ info modal ──────────────────────────────────────────────────── */
